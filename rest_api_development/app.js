@@ -39,6 +39,47 @@ app.get("/get/:id",(req ,res)=>{
         }
 })
 
+
+//add new book
+app.post('/add',(req ,res)=>{
+const newBook={
+    id:books.length +1,
+    title:`Book ${books.length +1}`
+}
+books.push(newBook)
+res.status(200).json({
+    data: newBook,
+    message:"New Book is added sucessfully"
+})
+})
+
+//upadate a book 
+app.put('/update/:id',(req ,res)=>{
+const findCurrentBook = books.find(book=>book.id ==req.params.id)
+if(findCurrentBook){
+    findCurrentBook.title =req.body.title || findCurrentBook.title
+    res.status(200).json(
+    {
+        message :`Book with iD :${req.params.id} update sucessfull`,
+        data:findCurrentBook
+    }
+    )
+}
+ res.status(404).json({
+    message:"Book not found try with different id"
+ })
+
+
+})
+
+
+
+
+
+
+
+
+
 const PORT =3001;
  
  app.listen(PORT,()=> {
