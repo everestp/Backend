@@ -48,17 +48,25 @@ connectDB()
         console.log("New user Created ",newUser)
 
     //To get all the user whoese isActive is false
- const getUserOfActiveFalse = await User.find({isActive :false})
+ const getUserOfActiveFalse = await User.find({isActive :true})
 console.log("Data is Active false",getUserOfActiveFalse)
 
 const getLastCreatedUserByUserId = User.findById(newUser._id);
-console.log("Last Create User",getLastCreatedUserByUser)
+console.log("Last Create User",getLastCreatedUserByUserId)
 const selectedField = await User.find().select("name email -_id")
 console.log(selectedField)
 
 const limitedUser = await User.find().select("name email -_id").limit(5).skip(1);
 console.log(limitedUser)
-        
+
+
+//Return  the sorted Data
+const sortedUsers =await User.find().sort({age: -1})  // In Desecnding Order
+const sortedUsers_Ascending =await User.find().sort({age: 1})  // In Acending Order
+
+//Count Document
+const countDocuments = await User.countDocuments()
+console.log(countDocuments)
     } catch (error) {
         console.log('Error->',error)
     }
