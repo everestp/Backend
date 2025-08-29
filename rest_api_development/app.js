@@ -72,6 +72,22 @@ if(findCurrentBook){
 
 })
 
+//delete the book
+app.delete('/delete/:id',(req ,res)=>{
+ const  findIndexOfCurrentBook = books.findIndex(item=>item.id===req.params.id)
+if(findIndexOfCurrentBook !==-1){
+    const deleteBook = books.splice(findIndexOfCurrentBook,1)
+    res.status(200).json({
+        message:`Book delete with ID ${findIndexOfCurrentBook +1}`,
+        data: deleteBook[0]
+    })
+}
+ res.status(404).json({
+    message:"Book not found try with different id"
+ })
+
+})
+
 
 
 
