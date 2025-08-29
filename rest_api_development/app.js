@@ -43,7 +43,7 @@ app.get("/get/:id",(req ,res)=>{
 //add new book
 app.post('/add',(req ,res)=>{
 const newBook={
-    id:books.length +1,
+    id:(books.length +1).toString(),
     title:`Book ${books.length +1}`
 }
 books.push(newBook)
@@ -74,7 +74,7 @@ if(findCurrentBook){
 
 //delete the book
 app.delete('/delete/:id',(req ,res)=>{
- const  findIndexOfCurrentBook = books.findIndex(item=>item.id===req.params.id)
+ const  findIndexOfCurrentBook = books.findIndex(item=>item.id==req.params.id)
 if(findIndexOfCurrentBook !==-1){
     const deleteBook = books.splice(findIndexOfCurrentBook,1)
     res.status(200).json({
