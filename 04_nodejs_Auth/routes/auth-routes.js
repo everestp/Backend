@@ -4,8 +4,8 @@ const authRouter = express.Router();
 
 //all routes all related to user Authentication and Authorization
 
-router.post('/register',registerUser);
-router.post('/login',loginUser)
+authRouter.post('/register',registerUser);
+authRouter.post('/login',loginUser)
 
 
 
