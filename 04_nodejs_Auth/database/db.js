@@ -10,7 +10,7 @@ const connectToDB = async ()=>{
            mongoose.connection.on('error',(err)=>{
                console.log("Error in connecting databases",err);
            })
-           await mongoose.connect(process.env.MONGO_URL)
+           await mongoose.connect("mongodb+srv://everestp:Everest@cluster0.6afcl9x.mongodb.net/")
            
            
        } catch (error) {
@@ -21,3 +21,5 @@ const connectToDB = async ()=>{
 
 
 module.exports = connectToDB
+
+
