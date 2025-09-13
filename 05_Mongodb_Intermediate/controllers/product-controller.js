@@ -50,46 +50,50 @@ const getProductStats = async(req ,res)=>{
 }
 
 
-const getProductAnalysis = async(req ,res)=>{
-       try {
+const getProductAnalysis = async (req, res) => {
+    try {
         const result = await Product.aggregate([
             {
-                $match:{
-                    category :'Electronics'
+                $match: {
+                    category: 'Electronics'
                 }
             },
             {
-                $group :{
-                    _id:null,
-                    totalRevenue:{
-                        $sum :"$price"
-                    },
-                    averagePrice:{
-                        $avg:"$price"
-                    },
-                     maxProductPrice:{
-                        $max:"$price"
-                     },
-                      minProductPrice:{
-                        $min:"$price"
-                     },
-                     
+                $group: {
+                    _id: null,
+                    totalRevenue: { $sum: "$price" },
+                    averagePrice: { $avg: "$price" },
+                    maxProductPrice: { $max: "$price" },
+                    minProductPrice: { $min: "$price" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalRevenue: 1,
+                    averagePrice: 1, // ✅ FIXED: changed from 2 → 1 (MongoDB uses 1 to include fields)
+                    maxProductPrice: 1,
+                    minProductPrice: 1,
+                    priceRange: {
+                        $subtract: ["$maxProductPrice", "$minProductPrice"] // ✅ FIXED: typo "$substact" → "$subtract"
+                    }
                 }
             }
-        ])
+        ]);
 
         res.status(200).json({
-            success:true,
-            data:result
-        })
-       } catch (error) {
-          console.error(error);
+            success: true,
+            data: result
+        });
+
+    } catch (error) {
+        console.error(error);
         res.status(500).json({
             success: false,
             message: "Something went wrong"
         });
-       }
-}
+    }
+};
 
 
 const insertSampleProducts = async (req, res) => {
