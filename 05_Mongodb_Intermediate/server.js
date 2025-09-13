@@ -1,19 +1,19 @@
+const express = require('express');
+const connectToDB = require('./databases/db');
+const productRoutes = require('./routes/product-routes');
 
+const app = express();
 
-const express = require('express')
-const mongoose = require('mongoose')
-const connectToDB = require('./databases/db')
+// Connect to MongoDB
+connectToDB();
 
-const app = express()
+// Middleware
+app.use(express.json());
 
-//connect to databases
-connectToDB()
+// Routes
+app.use('/products', productRoutes);
 
-
-
-//use middlewares
-app.use(express.json())
-
-app.listen(3000, ()=>{
-    console.log("Server is  runnging on port",3000)
-})
+// Start the server
+app.listen(3001, () => {
+    console.log("Server is running on port 3001");
+});
