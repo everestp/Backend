@@ -69,7 +69,7 @@ const getProductAnalysis = async (req, res) => {
             },
             {
                 $project: {
-                    _id: 0,
+                    _id: 1,
                     totalRevenue: 1,
                     averagePrice: 1, // ✅ FIXED: changed from 2 → 1 (MongoDB uses 1 to include fields)
                     maxProductPrice: 1,
