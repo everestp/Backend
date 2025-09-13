@@ -9,14 +9,29 @@ const getProductStats = async(req ,res)=>{
     try {
 
         const result = await Product.aggregate([
+            //stage 1
             {
                 $match :{
                     inStock: true,
                     price :{
-                        $gte :100
+                        $gte :10
 
                     }
                 }
+            },
+
+            // stage 2 : Group docunment
+            {
+                $group:{
+                    _id :"$category",
+                    avgPrice:{
+                        $avg:"$price"
+                    },
+                    count:{
+                        $sum:1
+                    },
+                }
+
             }
         ]);
 
