@@ -1,41 +1,61 @@
- 
+// Importing built-in modules
+const fs = require('fs');
+const crypto = require('crypto');
 
+// ----------------------
+// 1️⃣ Start of the script (synchronous code)
+// ----------------------
+console.log("1. script start"); // 🟢 Synchronous - runs immediately
 
-// times->pending callback ->idle ,preparte ->polls -> check-> closecllback
+// ----------------------
+// 2️⃣ setTimeout (macrotask) → Runs in "timers" phase
+// ----------------------
+setTimeout(() => {
+  console.log("2. setTimeout 0s callback (macrotask)");
+}, 0);
 
-  const fs = require('fs')
-  const crypto = require('crypto')
- console.log("1. script start")
-  setTimeout(()=>{
-    console.log("2. setTime =out 0s callback(macrotask)")
-  },0)
+setTimeout(() => {
+  console.log("3. setTimeout 0s callback (macrotask)");
+}, 0);
 
-    setTimeout(()=>{
-    console.log("3. setTime =out 0s callback(macrotask)")
-  },0)
+// ----------------------
+// 3️⃣ setImmediate → Runs in "check" phase (after I/O callbacks)
+// ----------------------
+setImmediate(() => {
+  console.log("4. setImmediate callback (check phase)");
+});
 
+// ----------------------
+// 4️⃣ Promise → Microtask → Runs after current stack, before any macrotasks
+// ----------------------
+Promise.resolve().then(() => {
+  console.log("5. Promise resolved (microtask)");
+});
 
+// ----------------------
+// 5️⃣ process.nextTick → Microtask → Runs even before Promises
+// ----------------------
+process.nextTick(() => {
+  console.log("6. process.nextTick callback (microtask)");
+});
 
-  setImmediate(()=>{
-    console.log("4. setImediate callback(check)")
-  })
+// ----------------------
+// 6️⃣ fs.readFile → Asynchronous I/O → Runs in "poll" phase, callback in "I/O callbacks" phase
+// ----------------------
+fs.readFile(__filename, () => {
+  console.log("7. fs.readFile complete (I/O callback)");
+});
 
-  Promise.resolve().then(()=>{
-    console.log(" 5. Promis resolve")
-  })
+// ----------------------
+// 7️⃣ crypto.pbkdf2 → CPU-intensive task → offloaded to libuv thread pool
+//    Callback runs in "poll" or "check" phase depending on timing
+// ----------------------
+crypto.pbkdf2("secret", 'salt', 1000, 64, "sha512", (err, key) => {
+  if (err) throw err;
+  console.log("8. crypto.pbkdf2 complete (CPU-intensive task, thread pool)");
+});
 
-  process.nextTick(()=>{
-    console.log("6. process.nextTick callback(microtask)")
-  })
-
-
-  fs.readFile(__filename,()=>{
-    console.log("7. file read operations (I/o callback)")
-  })
-
-  crypto.pbkdf2("secret",'salt',1000 ,64 ,"sha512",(err ,key)=>{
- if(err) throw err
- console.log("8 .pbkdf2 operation complete ->THis is the cpu intensice task")
-  })
-
-   console.log("9. script end")
+// ----------------------
+// 8️⃣ End of script (synchronous)
+// ----------------------
+console.log("9. script end"); // 🟢 Synchronous - runs immediately
