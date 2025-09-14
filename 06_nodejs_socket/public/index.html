@@ -3,23 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chat App</title>
+    <style>
+        #chat {
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <div id="user-list">
-  <h3>Online user</h3>
-  <ul id="users"></ul>
+        <h3>Online Users</h3>
+        <ul id="users"></ul>
     </div>
-    <div id="chat">
-<form action="" id="message-from">
-    <input type="text"
-    id="message-input"
-    placeholder="Enter your message"
-    required
-    
-    >
-    <button type="submit">Send</button>
-</form>
-    </div>
+    <div id="chat"></div>
+    <form id="message-form">
+        <input type="text"
+               id="message-input"
+               placeholder="Enter your message"
+               required>
+        <button type="submit">Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const chat = document.getElementById('chat');
+        const userList = document.getElementById('users');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        const userName = prompt("Enter your username") || "Anonymous";
+
+        // Emit the 'join' event to the server
+        socket.emit('join', userName);
+
+        // Listen for when a new user joins
+        socket.on("userJoined", (user) => {
+            addMessage(`${user} has joined the chat.`);
+        });
+
+        // Listen for incoming chat messages from the server
+        socket.on("chatMessage", (data) => {
+            addMessage(`${data.user}: ${data.message}`);
+        });
+
+        // Listen for the updated user list from the server
+        socket.on("userList", (users) => {
+            userList.innerHTML = ''; // Clear the current list
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = user;
+                userList.appendChild(li);
+            });
+        });
+
+        // Handle form submission to send a message
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = messageInput.value.trim();
+            if (message === '') return;
+
+            // Emit the message to the server
+            socket.emit('sendMessage', { user: userName, message: message });
+
+            // Display your own message in the chat
+            addMessage(`You: ${message}`);
+
+            // Clear the input field
+            messageInput.value = '';
+        });
+
+        // Helper function to add messages to the chat box
+        function addMessage(input) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = input;
+            chat.appendChild(messageElement);
+            // Scroll to the bottom of the chat container
+            chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
 </body>
 </html>
