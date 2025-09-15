@@ -1,0 +1,15 @@
+require('dotenv').config()
+const expess = require('express')
+const cors = require('cors')
+const configureCors = require('./config/corsConfig')
+const app = expess()
+const PORT =3000
+
+
+app.use(configureCors)
+// express json middleware
+app.use(expess.json())
+
+app.listen(PORT, ()=>{
+    console.log("Server is listening at Port",PORT)
+})
