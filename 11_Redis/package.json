@@ -1,5 +1,5 @@
 {
-  "name": "10_express_concept",
+  "name": "11_redis",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js"
-
   },
   "keywords": [],
   "author": "",
@@ -16,9 +15,9 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
-    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "express-rate-limit": "^8.1.0"
+    "ioredis": "^5.7.0",
+    "redis": "^5.8.2"
   }
 }
