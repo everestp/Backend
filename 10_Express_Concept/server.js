@@ -18,17 +18,17 @@ const app = expess()
 const PORT =3000
 
 
-// express json middleware
+// app.use(configureCors)
+//express json middleware
 app.use(expess.json())
-app.use('/api/v1',urlVersioning('v1'))
+app.use(urlVersioning('v1'))
 app.use(requestLogger)
 app.use(addTimeStamp)
-app.use(configureCors)
-app.use(createBasicRateLimit(100 , 15 *60 *1000))  //100 request  per 15 minutes
+app.use(createBasicRateLimit(2 , 15 *60 *1000))  //100 request  per 15 minutes
 app.use('/api/v1',itemsRoutes)
 
 
 app.use(globalErrorhandler)
-app.listen(3000, ()=>{
+app.listen(3005, ()=>{
     console.log("Server is listening at Port",PORT)
 })
